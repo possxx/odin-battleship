@@ -57,7 +57,7 @@ describe('gameboard works as expected', () => {
 		expect(gameboard.board[0][0].hits).toEqual(1);
 
 		gameboard.receiveAttack([9, 8]);
-		expect(gameboard.missedAttacks.has([9, 8].toString())).toEqual(true);
+		expect(gameboard.attacks.has([9, 8].toString())).toEqual(true);
 	});
 
 	test('handles all ships sunk', () => {

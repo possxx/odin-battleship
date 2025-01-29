@@ -5,7 +5,7 @@ export default class Gameboard {
 		this.board = this.createBoard();
 		this.ships = [];
 		this.hits = new Set();
-		this.missedAttacks = new Set();
+		this.attacks = new Set();
 	}
 
 	createBoard() {
@@ -30,7 +30,7 @@ export default class Gameboard {
 			this.board[x][y].hit();
 			this.hits.add(coordinate.toString());
 		} else {
-			this.missedAttacks.add(coordinate.toString());
+			this.attacks.add(coordinate.toString());
 		}
 	}
 
