@@ -1,5 +1,5 @@
 export default class GameboardDOM {
-	createGameboard(type, gameboard) {
+	static createGameboard(type, gameboard) {
 		const gameboardDOM = document.createElement('div');
 		gameboardDOM.classList.add('gameboard');
 		gameboardDOM.classList.add(type);
@@ -42,7 +42,7 @@ export default class GameboardDOM {
 		return gameboardDOM;
 	}
 
-	getCellType(gameboard, type, rowIndex, columnIndex) {
+	static getCellType(gameboard, type, rowIndex, columnIndex) {
 		const coor = [rowIndex, columnIndex - 1].toString();
 
 		if (
@@ -67,7 +67,7 @@ export default class GameboardDOM {
 		}
 	}
 
-	createCell(type) {
+	static createCell(type) {
 		const cellDOM = document.createElement('div');
 		cellDOM.classList.add('cell');
 
