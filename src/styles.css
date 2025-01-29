@@ -1,1 +1,187 @@
 @import '../node_modules/possxx-reset/possxx-reset.css';
+
+@font-face {
+	font-family: 'ArmyRust';
+	src:
+		url('./fonts/army_rust-webfont.woff2') format('woff2'),
+		url('./fonts/army_rust-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Lato';
+	src:
+		url('./fonts/lato-light-webfont.woff2') format('woff2'),
+		url('./fonts/lato-light-webfont.woff') format('woff');
+	font-weight: 300;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Lato';
+	src:
+		url('./fonts/lato-regular-webfont.woff2') format('woff2'),
+		url('./fonts/lato-regular-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Lato';
+	src:
+		url('./fonts/lato-bold-webfont.woff2') format('woff2'),
+		url('./fonts/lato-bold-webfont.woff') format('woff');
+	font-weight: bold;
+	font-style: normal;
+}
+
+:root {
+	--primary-color: #1b3a57;
+	--secondary-color: #5a6a7a;
+	--accent-color: #d72638;
+	--hightlight-color: #47a3c1;
+	--background-color: #f2f5f7;
+}
+
+body {
+	display: flex;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.game-wrapper {
+	max-width: 1330px;
+	min-width: 990px;
+}
+
+.header {
+	display: flex;
+	margin-top: 32px;
+}
+
+.title {
+	font-family: 'ArmyRust';
+	font-size: 64px;
+	user-select: none;
+	color: var(--primary-color);
+	line-height: 0.6;
+	align-self: center;
+}
+
+.notifications {
+	min-width: 400px;
+	text-align: center;
+	font-family: 'Lato';
+	font-weight: normal;
+	font-size: 16px;
+	align-self: center;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 12px 32px;
+	background-color: var(--background-color);
+	color: var(--primary-color);
+}
+
+.game {
+	margin-top: 64px;
+	display: flex;
+	gap: 64px;
+	justify-content: center;
+}
+
+.gameboard {
+	background-color: var(--background-color);
+	min-width: 400px;
+	min-height: 400px;
+}
+
+.row {
+	display: flex;
+}
+
+.coorX {
+	display: flex;
+}
+
+.row:first-child .cell {
+	border-top: 1px solid var(--primary-color);
+}
+
+.cell:nth-child(2) {
+	border-left: 1px solid var(--primary-color);
+}
+
+.cell,
+.coor {
+	min-width: 40px;
+	min-height: 40px;
+}
+
+.coor {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+}
+
+.cell {
+	border-right: 1px solid var(--primary-color);
+	border-bottom: 1px solid var(--primary-color);
+	border-collapse: collapse;
+}
+
+.cell.shiphit {
+	background-color: var(--primary-color);
+	display: grid;
+	place-content: center;
+}
+
+.cell.shiphit::after {
+	content: 'X';
+	font-family: 'Lato';
+	font-weight: 300;
+	font-size: 32px;
+	line-height: 0;
+	color: var(--accent-color);
+}
+
+.cell.miss {
+	display: grid;
+	place-content: center;
+}
+
+.cell.miss::after {
+	content: 'X';
+	font-family: 'Lato';
+	font-weight: 300;
+	font-size: 32px;
+	line-height: 0;
+	color: var(--primary-color);
+}
+
+.cell.hit {
+	display: grid;
+	place-content: center;
+}
+
+.cell.hit::after {
+	content: 'X';
+	font-family: 'Lato';
+	font-weight: 300;
+	font-size: 32px;
+	line-height: 0;
+	color: var(--accent-color);
+}
+
+.cell.ship {
+	background-color: var(--primary-color);
+}
+
+.cell.player {
+	cursor: not-allowed;
+}
+
+.cell.computer {
+	cursor: pointer;
+}
