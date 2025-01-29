@@ -29,9 +29,9 @@ export default class Gameboard {
 		if (this.board[x][y] instanceof Ship) {
 			this.board[x][y].hit();
 			this.hits.add(coordinate.toString());
+		} else {
+			this.missedAttacks.add(coordinate.toString());
 		}
-
-		this.missedAttacks.add(coordinate.toString());
 	}
 
 	allSunk() {
