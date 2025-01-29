@@ -4,6 +4,7 @@ export default class Gameboard {
 	constructor() {
 		this.board = this.createBoard();
 		this.ships = [];
+		this.hits = new Set();
 		this.missedAttacks = new Set();
 	}
 
@@ -25,9 +26,12 @@ export default class Gameboard {
 	receiveAttack(coordinate) {
 		const [x, y] = coordinate;
 
-		this.board[x][y] instanceof Ship
-			? this.board[x][y].hit()
-			: this.missedAttacks.add(coordinate.toString());
+		if (this.board[x][y] instanceof Ship) {
+			this.board[x][y].hit();
+			this.hits.add(coordinate.toString());
+		}
+
+		this.missedAttacks.add(coordinate.toString());
 	}
 
 	allSunk() {
