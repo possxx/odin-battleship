@@ -3,6 +3,15 @@ export default class GameboardDOM {
 		const gameboardDOM = document.createElement('div');
 		gameboardDOM.classList.add('gameboard');
 		gameboardDOM.classList.add(type);
+		const gameboardTextDOM = document.createElement('div');
+		gameboardTextDOM.classList.add('gameboard-text');
+
+		const gameboardText = {
+			player: 'Your Board',
+			computer: `Opponent's Board`,
+		};
+
+		gameboardTextDOM.innerText = gameboardText[type];
 
 		const coordinates = [' abcdefghij', Array.from({ length: 10 })];
 
@@ -38,6 +47,8 @@ export default class GameboardDOM {
 				rowDOM.appendChild(cellDOM);
 			}
 		}
+
+		gameboardDOM.appendChild(gameboardTextDOM);
 
 		return gameboardDOM;
 	}
