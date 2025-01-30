@@ -18,7 +18,6 @@ export default class GameboardDOM {
 		for (let rowIndex = 0; rowIndex <= gameboard.board.length; rowIndex++) {
 			const rowDOM = document.createElement('div');
 			rowDOM.classList.add('row');
-			rowDOM.dataset.row = rowIndex;
 			gameboardDOM.appendChild(rowDOM);
 
 			for (
@@ -44,6 +43,8 @@ export default class GameboardDOM {
 					this.getCellType(gameboard, type, rowIndex, columnIndex)
 				);
 				cellDOM.classList.add(type);
+				cellDOM.dataset.x = rowIndex;
+				cellDOM.dataset.y = columnIndex - 1;
 				rowDOM.appendChild(cellDOM);
 			}
 		}
