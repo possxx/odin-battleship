@@ -1,5 +1,5 @@
 export default class ButtonDOM {
-	createButton(type) {
+	static createButton(type) {
 		const buttonDOM = document.createElement('button');
 		buttonDOM.classList.add(`${type} control-button`);
 

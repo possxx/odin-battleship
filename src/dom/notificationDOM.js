@@ -1,5 +1,5 @@
 export default class Notification {
-	createNotification(type, ship) {
+	static createNotification(type, ship) {
 		const notificationDOM = document.createElement('div');
 		notificationDOM.classList.add(`${type.toLowerCase()} notifications`);
 
