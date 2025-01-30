@@ -39,6 +39,8 @@ export default class Gameboard {
 	}
 
 	randomShipPlacement() {
+		this.board = this.createBoard();
+
 		const ships = [
 			{ name: 'Carrier', length: 5 },
 			{ name: 'Battleship', length: 4 },
