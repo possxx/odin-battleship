@@ -1,7 +1,7 @@
 export default class Notification {
 	static createNotification(type, ship) {
 		const notificationDOM = document.createElement('div');
-		notificationDOM.classList.add(`${type.toLowerCase()} notifications`);
+		notificationDOM.classList.add(`${type.toLowerCase()}`, 'notifications');
 
 		const text = {
 			start: 'Start Game or Reset Positions',
@@ -14,5 +14,7 @@ export default class Notification {
 		};
 
 		notificationDOM.innerText = text[type];
+
+		return notificationDOM;
 	}
 }
