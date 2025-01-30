@@ -1,4 +1,5 @@
 import Gameboard from '../gameboard';
+import Ship from '../ship';
 
 describe('gameboard works as expected', () => {
 	let gameboard;
@@ -69,5 +70,27 @@ describe('gameboard works as expected', () => {
 		});
 
 		expect(gameboard.allSunk()).toEqual(true);
+	});
+
+	test('handles random ship placement', () => {
+		gameboard.randomShipPlacement();
+
+		const ships = {};
+
+		gameboard.board.flat().forEach((cell) => {
+			if (cell instanceof Ship) {
+				if (cell.name in ships) {
+					ships[cell.name] += 1;
+				} else {
+					ships[cell.name] = 1;
+				}
+			}
+		});
+
+		expect(ships.Carrier).toBe(5);
+		expect(ships.Battleship).toBe(4);
+		expect(ships.Cruiser).toBe(3);
+		expect(ships.Submarine).toBe(3);
+		expect(ships.Destroyer).toBe(2);
 	});
 });
