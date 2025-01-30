@@ -40,7 +40,7 @@
 	--primary-color: #1b3a57;
 	--secondary-color: #5a6a7a;
 	--accent-color: #d72638;
-	--hightlight-color: #47a3c1;
+	--hightlight-color: #f5a623;
 	--background-color: #f2f5f7;
 }
 
@@ -98,6 +98,11 @@ body {
 	min-height: 400px;
 }
 
+.gameboard-text {
+	margin-top: 12px;
+	text-align: center;
+}
+
 .row {
 	display: flex;
 }
@@ -118,6 +123,7 @@ body {
 .coor {
 	min-width: 40px;
 	min-height: 40px;
+	font-size: 16px;
 }
 
 .coor {
@@ -130,6 +136,10 @@ body {
 	border-right: 1px solid var(--primary-color);
 	border-bottom: 1px solid var(--primary-color);
 	border-collapse: collapse;
+}
+
+.cell.empty.computer:hover {
+	background-color: var(--primary-color);
 }
 
 .cell.shiphit {
@@ -179,10 +189,35 @@ body {
 	background-color: var(--primary-color);
 }
 
-.cell.player {
+.cell.player,
+.cell.computer.hit,
+.cell.computer.miss {
 	cursor: not-allowed;
 }
 
-.cell.computer {
+.cell.computer.empty {
 	cursor: pointer;
+}
+
+.controls {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 64px;
+	gap: 16px;
+}
+
+.controls button {
+	font-family: 'Lato';
+	padding: 12px 32px;
+	background-color: transparent;
+	border: 1px solid var(--primary-color);
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+.controls button:hover {
+	background-color: var(--primary-color);
+	color: var(--background-color);
 }
