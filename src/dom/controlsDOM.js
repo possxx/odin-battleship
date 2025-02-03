@@ -60,8 +60,6 @@ export default class Controller {
 	}
 
 	async computerTurn() {
-		if (this.isComputerTurn) return;
-		this.isComputerTurn = true;
 		if (this.computerBoard.allSunk()) {
 			this.endGame();
 			return;
@@ -80,9 +78,8 @@ export default class Controller {
 					.replaceWith(
 						NotificationDOM.createNotification('computerTurn')
 					);
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		// await new Promise((resolve) => setTimeout(resolve, 1000));
 		this.handleComputerAttack();
-		this.isComputerTurn = false;
 	}
 
 	handleComputerAttack() {
