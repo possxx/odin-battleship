@@ -78,7 +78,7 @@ export default class Controller {
 					.replaceWith(
 						NotificationDOM.createNotification('computerTurn')
 					);
-		// await new Promise((resolve) => setTimeout(resolve, 1000));
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 		this.handleComputerAttack();
 	}
 
@@ -86,23 +86,21 @@ export default class Controller {
 		const move = this.computer.getMove();
 		const [x, y] = move;
 
-		if (!this.playerBoard.hits.has(move.toString())) {
-			this.playerBoard.receiveAttack([x, y], 'computer');
-			this.gameDOM
-				.querySelector('.player')
-				.replaceWith(
-					GameboardDOM.createGameboard('player', this.playerBoard)
-				);
+		this.playerBoard.receiveAttack([x, y], 'computer');
+		this.gameDOM
+			.querySelector('.player')
+			.replaceWith(
+				GameboardDOM.createGameboard('player', this.playerBoard)
+			);
 
-			this.shipSunkLastTurn = null;
-			if (this.playerBoard.ships.includes(this.playerBoard.board[x][y])) {
-				const ship = this.playerBoard.ships.find(
-					(shipValue) => shipValue === this.playerBoard.board[x][y]
-				);
-				ship.isSunk()
-					? (this.shipSunkLastTurn = ship)
-					: (this.shipSunkLastTurn = null);
-			}
+		this.shipSunkLastTurn = null;
+		if (this.playerBoard.ships.includes(this.playerBoard.board[x][y])) {
+			const ship = this.playerBoard.ships.find(
+				(shipValue) => shipValue === this.playerBoard.board[x][y]
+			);
+			ship.isSunk()
+				? (this.shipSunkLastTurn = ship)
+				: (this.shipSunkLastTurn = null);
 		}
 
 		this.playerTurn();
