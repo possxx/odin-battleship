@@ -6,8 +6,8 @@ import NotificationDOM from './notificationDOM';
 
 export default class Controller {
 	constructor() {
-		this.computer = new Computer();
 		this.player = new Player();
+		this.computer = new Computer(this.player.gameboard.board);
 		this.shipSunkLastTurn = null;
 	}
 
