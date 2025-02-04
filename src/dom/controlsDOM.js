@@ -1,6 +1,5 @@
 import Computer from '../computer';
 import Player from '../player';
-import Gameboard from '../gameboard';
 import GameboardDOM from './gameboardDOM';
 import ButtonDOM from './buttonDOM';
 import NotificationDOM from './notificationDOM';
@@ -9,8 +8,6 @@ export default class Controller {
 	constructor() {
 		this.computer = new Computer();
 		this.player = new Player();
-		this.computerBoard = new Gameboard();
-		this.playerBoard = new Gameboard();
 		this.shipSunkLastTurn = null;
 	}
 
@@ -19,11 +16,11 @@ export default class Controller {
 	controlsDOM = document.querySelector('.controls');
 
 	randomPlayerPositions() {
-		this.playerBoard.randomShipPlacement();
+		this.player.gameboard.randomShipPlacement();
 		this.gameDOM
 			.querySelector('.player')
 			.replaceWith(
-				GameboardDOM.createGameboard('player', this.playerBoard)
+				GameboardDOM.createGameboard('player', this.player.gameboard)
 			);
 	}
 
@@ -36,8 +33,8 @@ export default class Controller {
 				const y = cell.getAttribute('data-y');
 
 				if (
-					this.computerBoard.ships.includes(
-						this.computerBoard.board[x][y]
+					this.computer.gameboard.ships.includes(
+						this.computer.gameboard.board[x][y]
 					)
 				)
 					cell.classList.add('ship');
@@ -45,7 +42,7 @@ export default class Controller {
 	}
 
 	endGame() {
-		this.playerBoard.allSunk()
+		this.player.gameboard.allSunk()
 			? this.headerDOM
 					.querySelector('.notifications')
 					.replaceWith(NotificationDOM.createNotification('lose'))
@@ -60,10 +57,6 @@ export default class Controller {
 	}
 
 	async computerTurn() {
-		if (this.computerBoard.allSunk()) {
-			this.endGame();
-			return;
-		}
 		this.shipSunkLastTurn
 			? this.headerDOM
 					.querySelector('.notifications')
@@ -86,31 +79,34 @@ export default class Controller {
 		const move = this.computer.getMove();
 		const [x, y] = move;
 
-		this.playerBoard.receiveAttack([x, y], 'computer');
+		this.player.gameboard.receiveAttack([x, y], 'computer');
 		this.gameDOM
 			.querySelector('.player')
 			.replaceWith(
-				GameboardDOM.createGameboard('player', this.playerBoard)
+				GameboardDOM.createGameboard('player', this.player.gameboard)
 			);
 
 		this.shipSunkLastTurn = null;
-		if (this.playerBoard.ships.includes(this.playerBoard.board[x][y])) {
-			const ship = this.playerBoard.ships.find(
-				(shipValue) => shipValue === this.playerBoard.board[x][y]
+		if (
+			this.player.gameboard.ships.includes(
+				this.player.gameboard.board[x][y]
+			)
+		) {
+			const ship = this.player.gameboard.ships.find(
+				(shipValue) => shipValue === this.player.gameboard.board[x][y]
 			);
 			ship.isSunk()
 				? (this.shipSunkLastTurn = ship)
 				: (this.shipSunkLastTurn = null);
 		}
-
+		if (this.player.gameboard.allSunk()) {
+			this.endGame();
+			return;
+		}
 		this.playerTurn();
 	}
 
 	playerTurn() {
-		if (this.playerBoard.allSunk()) {
-			this.endGame();
-			return;
-		}
 		this.shipSunkLastTurn
 			? this.headerDOM
 					.querySelector('.notifications')
@@ -137,27 +133,34 @@ export default class Controller {
 		) {
 			const x = e.target.getAttribute('data-x');
 			const y = e.target.getAttribute('data-y');
-			this.computerBoard.receiveAttack([x, y], 'player');
+			this.computer.gameboard.receiveAttack([x, y], 'player');
 			this.gameDOM
 				.querySelector('.computer')
 				.replaceWith(
-					GameboardDOM.createGameboard('computer', this.computerBoard)
+					GameboardDOM.createGameboard(
+						'computer',
+						this.computer.gameboard
+					)
 				);
 
 			this.shipSunkLastTurn = null;
 			if (
-				this.computerBoard.ships.includes(
-					this.computerBoard.board[x][y]
+				this.computer.gameboard.ships.includes(
+					this.computer.gameboard.board[x][y]
 				)
 			) {
-				const ship = this.computerBoard.ships.find(
-					(shipValue) => shipValue === this.computerBoard.board[x][y]
+				const ship = this.computer.gameboard.ships.find(
+					(shipValue) =>
+						shipValue === this.computer.gameboard.board[x][y]
 				);
 				ship.isSunk()
 					? (this.shipSunkLastTurn = ship)
 					: (this.shipSunkLastTurn = null);
 			}
-
+			if (this.computer.gameboard.allSunk()) {
+				this.endGame();
+				return;
+			}
 			this.computerTurn();
 		}
 	};
@@ -169,13 +172,13 @@ export default class Controller {
 
 	initGame() {
 		this.headerDOM.appendChild(NotificationDOM.createNotification('start'));
-		this.playerBoard.randomShipPlacement();
-		this.computerBoard.randomShipPlacement();
+		this.player.gameboard.randomShipPlacement();
+		this.computer.gameboard.randomShipPlacement();
 		this.gameDOM.appendChild(
-			GameboardDOM.createGameboard('player', this.playerBoard)
+			GameboardDOM.createGameboard('player', this.player.gameboard)
 		);
 		this.gameDOM.appendChild(
-			GameboardDOM.createGameboard('computer', this.computerBoard)
+			GameboardDOM.createGameboard('computer', this.computer.gameboard)
 		);
 		this.controlsDOM.appendChild(ButtonDOM.createButton('start'));
 		this.controlsDOM.appendChild(ButtonDOM.createButton('random'));
