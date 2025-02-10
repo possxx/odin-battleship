@@ -7,7 +7,7 @@ import NotificationDOM from './notificationDOM';
 export default class Controller {
 	constructor() {
 		this.player = new Player();
-		this.computer = new Computer(this.player.gameboard.board);
+		this.computer = new Computer();
 		this.shipSunkLastTurn = null;
 	}
 
@@ -17,6 +17,7 @@ export default class Controller {
 
 	randomPlayerPositions() {
 		this.player.gameboard.randomShipPlacement();
+		this.computer.playerBoard = this.player.gameboard;
 		this.gameDOM
 			.querySelector('.player')
 			.replaceWith(
@@ -71,15 +72,14 @@ export default class Controller {
 					.replaceWith(
 						NotificationDOM.createNotification('computerTurn')
 					);
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		// await new Promise((resolve) => setTimeout(resolve, 1000));
 		this.handleComputerAttack();
 	}
 
 	handleComputerAttack() {
-		const move = this.computer.getMove();
+		const move = this.computer.makeMove();
 		const [x, y] = move;
 
-		this.player.gameboard.receiveAttack([x, y], 'computer');
 		this.gameDOM
 			.querySelector('.player')
 			.replaceWith(
