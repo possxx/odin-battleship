@@ -7,28 +7,46 @@ export default class Computer extends Player {
 		this.attacks = new Set();
 		this.playerBoard = null;
 		this.attackDirection = null;
-		this.currentShipAttacks = null;
+		this.currentShipAttacks = [];
 	}
 
 	makeMove() {
 		let move;
-		if (this.currentShipAttacks) {
+		if (this.currentShipAttacks[0]) {
 			move = this.determineMove();
 			this.playerBoard.receiveAttack(move);
 
 			if (
 				this.playerBoard.board[move[0]][move[1]] instanceof Ship &&
-				this.playerBoard.board[move[0]][move[1]].isSunk()
+				this.playerBoard.board[move[0]][move[1]] !==
+					this.currentShipAttacks[0][1]
 			) {
-				this.currentShipAttacks = null;
+				const shipAttacks = new Map();
+				shipAttacks.set(move.toString(), 'hit');
+				const ship = this.playerBoard.board[move[0]][move[1]];
+				this.currentShipAttacks.push([shipAttacks, ship]);
+			} else if (
+				this.playerBoard.board[move[0]][move[1]] instanceof Ship
+			) {
+				this.currentShipAttacks[0][0].set(move.toString(), 'hit');
+				if (this.playerBoard.board[move[0]][move[1]].isSunk()) {
+					this.currentShipAttacks.shift();
+				}
+			} else if (
+				this.currentShipAttacks[0][0].keys().toArray().length > 1
+			) {
+				this.currentShipAttacks[0][0].set(move.toString(), 'miss');
 			}
 
 			return move;
 		}
+
 		move = this.getRandomMove();
 		if (this.playerBoard.board[move[0]][move[1]] instanceof Ship) {
-			this.currentShipAttacks = new Map();
-			this.currentShipAttacks.set(move.toString(), 'hit');
+			const shipAttacks = new Map();
+			shipAttacks.set(move.toString(), 'hit');
+			const ship = this.playerBoard.board[move[0]][move[1]];
+			this.currentShipAttacks.push([shipAttacks, ship]);
 		}
 
 		this.playerBoard.receiveAttack(move);
@@ -38,8 +56,10 @@ export default class Computer extends Player {
 
 	determineMove() {
 		let move;
-		const currentShipAttacksCoor = this.currentShipAttacks.keys().toArray();
-		const currentShipAttacksStatus = this.currentShipAttacks
+		const currentShipAttacksCoor = this.currentShipAttacks[0][0]
+			.keys()
+			.toArray();
+		const currentShipAttacksStatus = this.currentShipAttacks[0][0]
 			.values()
 			.toArray();
 		const firstHit = currentShipAttacksCoor[0];
@@ -52,9 +72,6 @@ export default class Computer extends Player {
 				Number(firstHit.at(2)),
 			]);
 
-			if (this.playerBoard.board[move[0]][move[1]] instanceof Ship)
-				this.currentShipAttacks.set(move.toString(), 'hit');
-
 			return move;
 		} else if (
 			currentShipAttacksStatus.some((status) => status === 'miss')
@@ -64,9 +81,11 @@ export default class Computer extends Player {
 					attack ===
 					currentShipAttacksCoor[currentShipAttacksCoor.length - 1]
 				) {
-					const keys = Array.from(this.currentShipAttacks.keys());
+					const keys = Array.from(
+						this.currentShipAttacks[0][0].keys()
+					);
 					const lastKey = keys.pop();
-					this.currentShipAttacks.delete(lastKey);
+					this.currentShipAttacks[0][0].delete(lastKey);
 				}
 			});
 
@@ -77,9 +96,6 @@ export default class Computer extends Player {
 			);
 
 			this.attacks.add(move.toString());
-
-			if (this.playerBoard.board[move[0]][move[1]] instanceof Ship)
-				this.currentShipAttacks.set(move.toString(), 'hit');
 
 			return move;
 		} else {
@@ -95,6 +111,15 @@ export default class Computer extends Player {
 						this.attackDirection,
 						'-'
 					);
+				} else if (
+					this.playerBoard.board[move[0]][move[1]] !==
+					this.currentShipAttacks[0][1]
+				) {
+					move = this.getNextMove(
+						[Number(firstHit.at(0)), Number(firstHit.at(2))],
+						this.attackDirection,
+						'-'
+					);
 				} else {
 					move = this.getNextMove(
 						[Number(lastHit.at(0)), Number(lastHit.at(2))],
@@ -105,10 +130,6 @@ export default class Computer extends Player {
 			}
 
 			this.attacks.add(move.toString());
-
-			if (this.playerBoard.board[move[0]][move[1]] instanceof Ship)
-				this.currentShipAttacks.set(move.toString(), 'hit');
-			else this.currentShipAttacks.set(move.toString(), 'miss');
 
 			return move;
 		}
