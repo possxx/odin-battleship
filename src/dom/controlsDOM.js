@@ -15,14 +15,31 @@ export default class Controller {
 	gameDOM = document.querySelector('.game');
 	controlsDOM = document.querySelector('.controls');
 
-	randomPlayerPositions() {
-		this.player.gameboard.randomShipPlacement();
-		this.computer.playerBoard = this.player.gameboard;
-		this.gameDOM
-			.querySelector('.player')
-			.replaceWith(
-				GameboardDOM.createGameboard('player', this.player.gameboard)
-			);
+	randomPositions(player) {
+		let gameboard;
+		if (player === 'random') {
+			this.player.gameboard.randomShipPlacement();
+			this.computer.playerBoard = this.player.gameboard;
+			this.gameDOM
+				.querySelector('.player')
+				.replaceWith(
+					GameboardDOM.createGameboard(
+						'player',
+						this.player.gameboard
+					)
+				);
+			return;
+		} else if (player === 'player') {
+			this.player.gameboard.randomShipPlacement();
+			this.computer.playerBoard = this.player.gameboard;
+			gameboard = this.player.gameboard;
+		} else {
+			this.computer.gameboard.randomShipPlacement();
+			gameboard = this.computer.gameboard;
+		}
+		this.gameDOM.appendChild(
+			GameboardDOM.createGameboard(`${player}`, gameboard)
+		);
 	}
 
 	showComputerShips() {
@@ -72,7 +89,7 @@ export default class Controller {
 					.replaceWith(
 						NotificationDOM.createNotification('computerTurn')
 					);
-		// await new Promise((resolve) => setTimeout(resolve, 1000));
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 		this.handleComputerAttack();
 	}
 
@@ -172,19 +189,13 @@ export default class Controller {
 
 	initGame() {
 		this.headerDOM.appendChild(NotificationDOM.createNotification('start'));
-		this.player.gameboard.randomShipPlacement();
-		this.computer.gameboard.randomShipPlacement();
-		this.gameDOM.appendChild(
-			GameboardDOM.createGameboard('player', this.player.gameboard)
-		);
-		this.gameDOM.appendChild(
-			GameboardDOM.createGameboard('computer', this.computer.gameboard)
-		);
+		this.randomPositions('player');
+		this.randomPositions('computer');
 		this.controlsDOM.appendChild(ButtonDOM.createButton('start'));
 		this.controlsDOM.appendChild(ButtonDOM.createButton('random'));
 		this.controlsDOM
 			.querySelector('.random')
-			.addEventListener('click', () => this.randomPlayerPositions());
+			.addEventListener('click', () => this.randomPositions('random'));
 		this.controlsDOM
 			.querySelector('.start')
 			.addEventListener('click', () => this.startGame());
